@@ -9,6 +9,17 @@ class Component
   def get_size
     0
   end
+
+  # It is possible to include Composite methods in Component class
+  # def add(component)
+  #   puts "#{self.class} not implementing this method :("
+  #   #raise NotImplementedError, "Error"
+  # end
+  #
+  # def remove(component)
+  #   puts "#{self.class} not implementing this method :("
+  #   #raise NotImplementedError, "Error"
+  # end
 end
 
 #Leaf class
@@ -47,29 +58,47 @@ class Folder < Component
   end
 end
 
-#testing
-file1 = MyFile.new("ThisIsFile.txt", 124)
-file2 = MyFile.new("SomeGame", 842721)
-puts file1.name
-puts file1.get_size
-file1.size =9923
-puts file1.get_size
-puts file2.name
-puts file2.get_size
-#puts file2.size
-folder1 = Folder.new("FolderOfFiles")
-puts folder1.name
-puts folder1.get_size
+#User code (methods)
+def find_size(component)
+  puts "The size of #{component.name} is #{component.get_size} bytes."
+  component.get_size
+end
+
+def add_component(component1, component2)
+  puts "Add component #{component2.name} to component #{component1.name}"
+  component1.add(component2)
+end
+
+def remove_component(component1, component2)
+  puts "Remove component #{component2.name} from component #{component1.name}"
+  component1.remove(component2)
+end
+
+#Testing
+puts "--Working with MyFile(Leaf)--"
+file1 = MyFile.new("SomeTextFile", 5000)
+file2 = MyFile.new("SomeGame", 790000)
+find_size(file1)
+find_size(file2)
+puts "--Working with Folder(Composite)--"
+folder1 = Folder.new("FolderForTextAndGames")
+find_size(folder1)
+puts "-Adding Components(MyFiles) to created Folder-"
+add_component(folder1, file1)
+add_component(folder1, file2)
+find_size(folder1)
+puts "-Removing Component(MyFile) from created Folder-"
+remove_component(folder1, file1)
+find_size(folder1)
+#Returning removed Component(MyFile)
 folder1.add(file1)
-folder1.add(file2)
-puts folder1.get_size
-folder1.remove(file1)
-puts folder1.get_size
-folder2 = Folder.new("BiggerFolder")
-file3 = MyFile.new("AnotherFile", 4000)
-puts folder2.name
-puts folder2.add(file3)
-puts folder2.add(folder1)
-puts folder2.get_size
-folder2.components.first.size=1111
-puts folder2.get_size
+puts "--Working with multiple Folders(Composite) and Files(Leafs)--"
+folder2 = Folder.new("MainFolder")
+file3 = MyFile.new("JustFile", 7500)
+find_size(folder2)
+add_component(folder2, file3)
+add_component(folder2, folder1)
+find_size(folder2)
+
+##Example which will cause error if not including Composite methods in Component
+# add_component(file1, file2)
