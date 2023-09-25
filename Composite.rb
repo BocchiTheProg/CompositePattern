@@ -1,16 +1,10 @@
-#Component class
-class Component
-  attr_accessor :name
-
-  def initialize(name)
-    @name = name
-  end
-
+#Component module
+module Component
   def get_size
     0
   end
 
-  # It is possible to include Composite methods in Component class
+  # It is possible to include Composite methods in Component
   # def add(component)
   #   puts "#{self.class} not implementing this method :("
   #   #raise NotImplementedError, "Error"
@@ -23,11 +17,13 @@ class Component
 end
 
 #Leaf class
-class MyFile < Component
+class MyFile
+  include Component
+  attr_accessor :name
   attr_writer :size
 
   def initialize(name, size)
-    super(name)
+    @name = name
     @size = size
   end
 
@@ -37,11 +33,12 @@ class MyFile < Component
 end
 
 #Composite class
-class Folder < Component
-  attr_accessor :components
+class Folder
+  include Component
+  attr_accessor :name, :components
 
   def initialize(name)
-    super
+    @name = name
     @components = []
   end
 
